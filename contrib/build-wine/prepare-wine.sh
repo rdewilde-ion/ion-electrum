@@ -58,6 +58,9 @@ mv PyInstaller-2.1 $WINEPREFIX/drive_c/pyinstaller
 # install Cryptodome
 $PYTHON -m pip install pycryptodomex
 
+# install socks
+$PYTHON -m pip install pysocks
+
 # Install setuptools
 wget -O setuptools.exe "$SETUPTOOLS_URL"
 wine setuptools.exe
