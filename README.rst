@@ -9,8 +9,8 @@ Electrum - Lightweight Bitcoin client
   Homepage: https://electrum.org/
 
 
-.. image:: https://travis-ci.org/rdewilde/electrum-ion.svg?branch=master
-    :target: https://travis-ci.org/rdewilde/electrum-ion
+.. image:: https://travis-ci.org/RdeWilde/electrum-ion.svg?branch=master
+    :target: https://travis-ci.org/RdeWilde/electrum-ion
     :alt: Build Status
 
 
