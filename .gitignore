@@ -15,4 +15,5 @@ packages
 env/
 .tox/
 .buildozer/
+.idea/
 bin/

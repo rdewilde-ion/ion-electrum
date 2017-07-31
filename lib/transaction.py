@@ -99,6 +99,8 @@ class BCDataStream(object):
         return ''
 
     def read_boolean(self): return self.read_bytes(1)[0] != chr(0)
+    def read_char(self): return self._read_num('<b')
+    def read_uchar(self): return self._read_num('<B')
     def read_int16(self): return self._read_num('<h')
     def read_uint16(self): return self._read_num('<H')
     def read_int32(self): return self._read_num('<i')
@@ -107,6 +109,8 @@ class BCDataStream(object):
     def read_uint64(self): return self._read_num('<Q')
 
     def write_boolean(self, val): return self.write(chr(1) if val else chr(0))
+    def write_char(self, val): return self._write_num('<b', val)
+    def write_uchar(self, val): return self._write_num('<B', val)
     def write_int16(self, val): return self._write_num('<h', val)
     def write_uint16(self, val): return self._write_num('<H', val)
     def write_int32(self, val): return self._write_num('<i', val)
@@ -445,12 +449,13 @@ def deserialize(raw):
     d = {}
     start = vds.read_cursor
     d['version'] = vds.read_int32()
+    d['time'] = vds.read_int32()
     n_vin = vds.read_compact_size()
     is_segwit = (n_vin == 0)
-    if is_segwit:
-        marker = vds.read_bytes(1)
-        assert marker == chr(1)
-        n_vin = vds.read_compact_size()
+    # if is_segwit:
+    #     marker = vds.read_bytes(1)
+    #     assert marker == chr(1)
+    #     n_vin = vds.read_compact_size()
     d['inputs'] = list(parse_input(vds) for i in xrange(n_vin))
     n_vout = vds.read_compact_size()
     d['outputs'] = list(parse_output(vds,i) for i in xrange(n_vout))
@@ -514,6 +519,7 @@ class Transaction:
             raise BaseException("cannot initialize transaction", raw)
         self._inputs = None
         self._outputs = None
+        self.time = 0
         self.locktime = 0
         self.version = 1
 
@@ -583,6 +589,7 @@ class Transaction:
         d = deserialize(self.raw)
         self._inputs = d['inputs']
         self._outputs = [(x['type'], x['address'], x['value']) for x in d['outputs']]
+        self.time = d['time']
         self.locktime = d['lockTime']
         self.version = d['version']
         return d
@@ -590,6 +597,7 @@ class Transaction:
     @classmethod
     def from_io(klass, inputs, outputs, locktime=0):
         self = klass(None)
+        self.time = int(time.time())
         self._inputs = inputs
         self._outputs = outputs
         self.locktime = locktime
@@ -712,6 +720,7 @@ class Transaction:
     def serialize_preimage(self, i):
         nVersion = int_to_hex(self.version, 4)
         nHashType = int_to_hex(1, 4)
+        nTime = int_to_hex(self.time, 4)
         nLocktime = int_to_hex(self.locktime, 4)
         inputs = self.inputs()
         outputs = self.outputs()
@@ -728,7 +737,7 @@ class Transaction:
         else:
             txins = var_int(len(inputs)) + ''.join(self.serialize_input(txin, self.get_preimage_script(txin) if i==k else '') for k, txin in enumerate(inputs))
             txouts = var_int(len(outputs)) + ''.join(self.serialize_output(o) for o in outputs)
-            preimage = nVersion + txins + txouts + nLocktime + nHashType
+            preimage = nVersion + nTime + txins + txouts + nLocktime + nHashType
         return preimage
 
     def is_segwit(self):
@@ -736,6 +745,7 @@ class Transaction:
 
     def serialize(self, estimate_size=False, witness=True):
         nVersion = int_to_hex(self.version, 4)
+        nTime = int_to_hex(self.time, 4)
         nLocktime = int_to_hex(self.locktime, 4)
         inputs = self.inputs()
         outputs = self.outputs()
@@ -747,7 +757,7 @@ class Transaction:
             witness = ''.join(self.serialize_witness(x) for x in inputs)
             return nVersion + marker + flag + txins + txouts + witness + nLocktime
         else:
-            return nVersion + txins + txouts + nLocktime
+            return nVersion + nTime + txins + txouts + nLocktime
 
     def hash(self):
         print "warning: deprecated tx.hash()"

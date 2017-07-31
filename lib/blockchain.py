@@ -30,7 +30,7 @@ import util
 import bitcoin
 from bitcoin import *
 
-MAX_TARGET = 0x00000000FFFF0000000000000000000000000000000000000000000000000000
+MAX_TARGET = 0x000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 class Blockchain(util.PrintError):
     '''Manages blockchain headers and their verification'''
@@ -78,10 +78,11 @@ class Blockchain(util.PrintError):
             self.print_error("validated checkpoint", self.checkpoint_height)
         if bitcoin.TESTNET:
             return
-        if bits != header.get('bits'):
-            raise BaseException("bits mismatch: %s vs %s" % (bits, header.get('bits')))
-        if int('0x' + _hash, 16) > target:
-            raise BaseException("insufficient proof of work: %s vs target %s" % (int('0x' + _hash, 16), target))
+        # TODO FIXME ION
+        #if bits != header.get('bits'):
+        #    raise BaseException("bits mismatch: %s vs %s" % (bits, header.get('bits')))
+        #if int('0x' + _hash, 16) > target:
+        #    raise BaseException("insufficient proof of work: %s vs target %s" % (int('0x' + _hash, 16), target))
 
     def verify_chain(self, chain):
         first_header = chain[0]
@@ -142,7 +143,8 @@ class Blockchain(util.PrintError):
             urllib.urlretrieve(bitcoin.HEADERS_URL, filename + '.tmp')
             os.rename(filename + '.tmp', filename)
             self.print_error("done.")
-        except Exception:
+        except Exception as e:
+            self.print_error(e.message)
             self.print_error("download failed. creating file", filename)
             open(filename, 'wb+').close()
         self.downloading_headers = False
@@ -214,9 +216,9 @@ class Blockchain(util.PrintError):
 
     def get_target(self, index, chain=None):
         if bitcoin.TESTNET:
-            return 0, 0
+            return 0, 0 # TODO ION change
         if index == 0:
-            return 0x1d00ffff, MAX_TARGET
+            return 0x1e00ffff, MAX_TARGET # TODO ION change
         first = self.read_header((index-1) * 2016)
         last = self.read_header(index*2016 - 1)
         if last is None:
@@ -235,10 +237,20 @@ class Blockchain(util.PrintError):
         target = bitsBase << (8 * (bitsN-3))
         # new target
         nActualTimespan = last.get('timestamp') - first.get('timestamp')
-        nTargetTimespan = 14 * 24 * 60 * 60
-        nActualTimespan = max(nActualTimespan, nTargetTimespan / 4)
-        nActualTimespan = min(nActualTimespan, nTargetTimespan * 4)
-        new_target = min(MAX_TARGET, (target*nActualTimespan) / nTargetTimespan)
+        nTargetTimespan = 64 * 1000 # TODO ION change
+
+        if nActualTimespan < 0:
+            nActualTimespan = nTargetTimespan
+        elif nActualTimespan > nTargetTimespan * 10:
+            nActualTimespan = nTargetTimespan * 10
+
+        # nActualTimespan = max(nActualTimespan, nTargetTimespan / 4)
+        # nActualTimespan = min(nActualTimespan, nTargetTimespan * 4)
+        interval = 10
+        new_target = target
+        new_target *= ((interval - 1) * nTargetTimespan + nActualTimespan + nActualTimespan)
+        new_target /= ((interval + 1) * nTargetTimespan)
+        new_target = max(0, min(MAX_TARGET, new_target))
         # convert new target to bits
         c = ("%064x" % new_target)[2:]
         while c[:2] == '00' and len(c) > 6:

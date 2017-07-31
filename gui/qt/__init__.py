@@ -27,6 +27,8 @@ import sys
 import os
 import signal
 
+from gui.qt.ion_style import ion_stylesheet
+
 try:
     import PyQt4
 except Exception:
@@ -86,6 +88,7 @@ class ElectrumGui:
         self.efilter = OpenFileEventFilter(self.windows)
         self.app = QApplication(sys.argv)
         self.app.installEventFilter(self.efilter)
+        self.app.setStyleSheet(ion_stylesheet)
         self.timer = Timer()
         # init tray
         self.dark_icon = self.config.get("dark_icon", False)

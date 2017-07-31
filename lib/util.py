@@ -35,7 +35,7 @@ import urllib
 import threading
 from i18n import _
 
-base_units = {'BTC':8, 'mBTC':5, 'uBTC':2}
+base_units = {'ION':8, 'mION':5, 'uION':2}
 fee_levels = [_('Within 25 blocks'), _('Within 10 blocks'), _('Within 5 blocks'), _('Within 2 blocks'), _('In the next block')]
 
 def normalize_version(v):
@@ -537,10 +537,10 @@ class SocketPipe:
             except ssl.SSLError:
                 raise timeout
             except socket.error as err:
-                if err.errno == 60:
+                if err.errno == errno.ENOSTR:
                     raise timeout
-                elif err.errno in [11, 35, 10035]:
-                    print_error("socket errno %d (resource temporarily unavailable)"% err.errno)
+                elif err.errno in [errno.EWOULDBLOCK, errno.EDEADLOCK, 10035]:
+                    #print_error("socket errno %d (resource temporarily unavailable)"% err.errno)
                     time.sleep(0.2)
                     raise timeout
                 else:
@@ -551,6 +551,7 @@ class SocketPipe:
                 data = ''
 
             if not data:  # Connection closed remotely
+                self.socket.close()
                 return None
             self.message += data
             self.recv_time = time.time()

@@ -39,13 +39,13 @@ import pyaes
 # Bitcoin network constants
 TESTNET = False
 NOLNET = False
-ADDRTYPE_P2PKH = 0
-ADDRTYPE_P2SH = 5
-ADDRTYPE_P2WPKH = 6
+ADDRTYPE_P2PKH = 103
+ADDRTYPE_P2SH = 88
+ADDRTYPE_P2WPKH = 153
 XPRV_HEADER = 0x0488ade4
 XPUB_HEADER = 0x0488b21e
-HEADERS_URL = "https://headers.electrum.org/blockchain_headers"
-GENESIS = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+HEADERS_URL = "https://headers.electrum.ionomy.nl/blockchain_headers" # TODO FIXME
+GENESIS = "0000004cf5ffbf2e31a9aa07c86298efb01a30b8911b80af7473d1114715084b"
 
 def set_testnet():
     global ADDRTYPE_P2PKH, ADDRTYPE_P2SH, ADDRTYPE_P2WPKH
@@ -53,13 +53,13 @@ def set_testnet():
     global TESTNET, HEADERS_URL
     global GENESIS
     TESTNET = True
-    ADDRTYPE_P2PKH = 111
+    ADDRTYPE_P2PKH = 97
     ADDRTYPE_P2SH = 196
-    ADDRTYPE_P2WPKH = 3
+    ADDRTYPE_P2WPKH = 239
     XPRV_HEADER = 0x04358394
     XPUB_HEADER = 0x043587cf
-    HEADERS_URL = "https://headers.electrum.org/testnet_headers"
-    GENESIS = "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"
+    HEADERS_URL = "https://headers.electrum.ionomy.nl/testnet_headers" # FIXME
+    GENESIS = "0000002bed128b6b2a62bd8edd4e6f8a414eac38e256aa0194adb8c93fe18132" # FIXME
 
 def set_nolnet():
     global ADDRTYPE_P2PKH, ADDRTYPE_P2SH, ADDRTYPE_P2WPKH
@@ -72,7 +72,7 @@ def set_nolnet():
     ADDRTYPE_P2WPKH = 6
     XPRV_HEADER = 0x0488ade4
     XPUB_HEADER = 0x0488b21e
-    HEADERS_URL = "https://headers.electrum.org/nolnet_headers"
+    HEADERS_URL = "https://headers.electrum.ionomy.nl/nolnet_headers"
     GENESIS = "663c88be18d07c45f87f910b93a1a71ed9ef1946cad50eb6a6f3af4c424625c6"
 
 
@@ -83,7 +83,7 @@ FEE_STEP = 10000
 MAX_FEE_RATE = 300000
 FEE_TARGETS = [25, 10, 5, 2]
 
-COINBASE_MATURITY = 100
+COINBASE_MATURITY = 30
 COIN = 100000000
 
 # supported types of transction outputs

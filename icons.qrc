@@ -7,6 +7,7 @@
     <file>icons/clock4.png</file>
     <file>icons/clock5.png</file>
     <file>icons/confirmed.png</file>
+    <file>icons/cold_seed.png</file>
     <file>icons/copy.png</file>
     <file>icons/digitalbitbox.png</file>
     <file>icons/digitalbitbox_unpaired.png</file>
@@ -14,6 +15,8 @@
     <file>icons/electrum_light_icon.png</file>
     <file>icons/electrum_dark_icon.png</file>
     <file>icons/file.png</file>
+    <file>icons/hot_seed.png</file>
+    <file>icons/ion_logo_text.png</file>
     <file>icons/keepkey.png</file>
     <file>icons/keepkey_unpaired.png</file>
     <file>icons/key.png</file>
@@ -42,5 +45,10 @@
     <file>icons/unlock.png</file>
     <file>icons/warning.png</file>
     <file>icons/zoom.png</file>
+    <file>icons/ion_downArrow.png</file>
+    <file>icons/ion_upArrow_small.png</file>
+    <file>icons/ion_downArrow_small.png</file>
+    <file>icons/ion_leftArrow_small.png</file>
+    <file>icons/ion_rightArrow_small.png</file>
   </qresource>
 </RCC>
