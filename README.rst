@@ -9,8 +9,8 @@ Electrum - Lightweight Bitcoin client
   Homepage: https://electrum.org/
 
 
-.. image:: https://travis-ci.org/spesmilo/electrum.svg?branch=master
-    :target: https://travis-ci.org/spesmilo/electrum
+.. image:: https://travis-ci.org/rdewilde/electrum-ion.svg?branch=master
+    :target: https://travis-ci.org/rdewilde/electrum-ion
     :alt: Build Status
 
 
@@ -50,7 +50,7 @@ Development version
 
 Check out the code from Github::
 
-    git clone git://github.com/spesmilo/electrum.git
+    git clone git://github.com/rdewilde/electrum-ion.git
     cd electrum
 
 Run install (this should install dependencies)::
