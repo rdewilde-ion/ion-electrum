@@ -17,3 +17,5 @@ env/
 .buildozer/
 .idea/
 bin/
+/contrib/build-wine/tmp/
+/electrum.conf
