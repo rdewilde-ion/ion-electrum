@@ -124,10 +124,11 @@ class TcpConnection(threading.Thread, util.PrintError):
                 if s is None:
                     return
                 # try with CA first
-                try:
-                    s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, cert_reqs=ssl.CERT_REQUIRED, ca_certs=ca_path, do_handshake_on_connect=True)
-                except ssl.SSLError, e:
-                    s = None
+                if not os.path.exists(ca_path):
+                    try:
+                        s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, cert_reqs=ssl.CERT_REQUIRED, ca_certs=ca_path, do_handshake_on_connect=True)
+                    except ssl.SSLError, e:
+                        s = None
                 if s and self.check_host_name(s.getpeercert(), self.host):
                     self.print_error("SSL certificate signed by CA")
                     return s
