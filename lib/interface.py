@@ -34,7 +34,12 @@ import time
 import traceback
 
 import requests
-ca_path = requests.certs.where()
+# import certifi
+#ca_path = requests.utils.DEFAULT_CA_BUNDLE_PATH
+# ca_path = certifi.where()
+
+ca_path = os.environ["REQUESTS_CA_BUNDLE"]
+# requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS'
 
 import util
 import x509
@@ -107,7 +112,7 @@ class TcpConnection(threading.Thread, util.PrintError):
                 s = socket.socket(res[0], socket.SOCK_STREAM)
                 s.settimeout(10)
                 s.connect(res[4])
-                s.settimeout(2)
+                s.settimeout(4)
                 s.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
                 return s
             except BaseException as e:
@@ -118,20 +123,30 @@ class TcpConnection(threading.Thread, util.PrintError):
     def get_socket(self):
         if self.use_ssl:
             cert_path = os.path.join(self.config_path, 'certs', self.host)
+
             if not os.path.exists(cert_path):
                 is_new = True
                 s = self.get_simple_socket()
                 if s is None:
                     return
                 # try with CA first
-                if not os.path.exists(ca_path):
+                if os.path.exists(ca_path):
                     try:
+
                         s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, cert_reqs=ssl.CERT_REQUIRED, ca_certs=ca_path, do_handshake_on_connect=True)
-                    except ssl.SSLError, e:
+                    except socket.timeout:
+                        return
+                    except ssl.SSLError as e:
+                        self.print_error(str(e))
+                    #    s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, cert_reqs=ssl.CERT_REQUIRED, ca_certs=ca_path, do_handshake_on_connect=True)
+                    #except ssl.SSLError, e:
                         s = None
-                if s and self.check_host_name(s.getpeercert(), self.host):
-                    self.print_error("SSL certificate signed by CA")
-                    return s
+                    if s and self.check_host_name(s.getpeercert(), self.host):
+                        self.print_error("SSL certificate signed by CA")
+                        return s
+                else:
+                    self.print_error("SSL ca_path does not exists:", ca_path)
+
                 # get server certificate.
                 # Do not use ssl.get_server_certificate because it does not work with proxy
                 s = self.get_simple_socket()
@@ -139,7 +154,11 @@ class TcpConnection(threading.Thread, util.PrintError):
                     return
                 try:
                     s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, cert_reqs=ssl.CERT_NONE, ca_certs=None)
-                except ssl.SSLError, e:
+                except socket.timeout:
+                    return
+                except ssl.SSLError as e:
+                #    s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, cert_reqs=ssl.CERT_NONE, ca_certs=None)
+                #except ssl.SSLError, e:
                     self.print_error("SSL error retrieving SSL certificate:", e)
                     return
 
@@ -165,7 +184,10 @@ class TcpConnection(threading.Thread, util.PrintError):
                                     cert_reqs=ssl.CERT_REQUIRED,
                                     ca_certs= (temporary_path if is_new else cert_path),
                                     do_handshake_on_connect=True)
-            except ssl.SSLError, e:
+            except socket.timeout:
+                self.print_error('timeout')
+                return
+            except ssl.SSLError as e:
                 self.print_error("SSL error:", e)
                 if e.errno != 1:
                     return
@@ -191,11 +213,11 @@ class TcpConnection(threading.Thread, util.PrintError):
                         os.unlink(cert_path)
                         return
                     self.print_error("wrong certificate")
-                return
-            except BaseException, e:
-                self.print_error(e)
                 if e.errno == 104:
                     return
+                return
+            except BaseException as e:
+                self.print_error(e)
                 traceback.print_exc(file=sys.stderr)
                 return
 
@@ -369,7 +391,6 @@ def test_certificates():
     mydir = os.path.join(config.path, "certs")
     certs = os.listdir(mydir)
     for c in certs:
-        print c
         p = os.path.join(mydir,c)
         with open(p) as f:
             cert = f.read()

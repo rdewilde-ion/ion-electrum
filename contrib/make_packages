@@ -17,13 +17,15 @@ if __name__ == '__main__':
         'pyaes',
         'ecdsa',
         'pbkdf2',
+        'certifi=2015.04.28',
         'requests', # note: requests-2.5.1 is needed to build with pyinstaller
         'qrcode',
         'google/protobuf',
         'dns',
         'six',
         'jsonrpclib',
-	'socks',
+        'pyopenssl',
+        'pysocks>=1.6.6'
     ]
     for module in deps:
         f, pathname, descr = imp.find_module(module)
@@ -44,8 +46,8 @@ if __name__ == '__main__':
         os.system("echo \# do not remove>%s"%n)
 
     # patch requests and add cacert.pem
-    import requests
-    crt = requests.certs.where()
+    import certifi
+    crt = 'packages/requests/cacert.pem'
     n = 'packages/requests/certs.py'
     with open(n, 'r') as f:
         s = f.read()

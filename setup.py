@@ -33,7 +33,7 @@ if platform.system() in ['Linux', 'FreeBSD', 'DragonFly']:
     ]
 
 setup(
-    name="Electrum",
+    name="Electrum-ion",
     version=version.ELECTRUM_VERSION,
     install_requires=[
         'pyaes',
@@ -45,6 +45,8 @@ setup(
         'dnspython',
         'jsonrpclib',
         'pysocks>=1.6.6',
+        'pyopenssl',
+        'idna'
     ],
     packages=[
         'electrum',
@@ -79,6 +81,7 @@ setup(
     },
     scripts=['electrum'],
     data_files=data_files,
+    include_files=["packages/requests/cacert.pem"],
     description="Lightweight Bitcoin Wallet",
     author="Thomas Voegtlin",
     author_email="thomasv@electrum.org",

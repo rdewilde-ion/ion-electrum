@@ -30,6 +30,7 @@ import util
 from util import profiler, print_error
 import ecdsa
 import hashlib
+import os
 
 
 # algo OIDs
@@ -329,6 +330,7 @@ def load_certificates(ca_path):
 if __name__ == "__main__":
     import requests
     util.set_verbosity(True)
-    ca_path = requests.certs.where()
+    # ca_path = requests.certs.where()
+    ca_path = os.environ["REQUESTS_CA_BUNDLE"]
     ca_list, ca_keyID = load_certificates(ca_path)
 

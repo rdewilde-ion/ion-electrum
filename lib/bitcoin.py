@@ -45,6 +45,7 @@ ADDRTYPE_P2WPKH = 153
 XPRV_HEADER = 0x0488ade4
 XPUB_HEADER = 0x0488b21e
 HEADERS_URL = "https://headers.electrum.ionomy.nl/blockchain_headers" # TODO FIXME
+# HEADERS_URL = "https://header.electrum.baseserv.com/blockchain_headers" # TODO FIXME
 GENESIS = "0000004cf5ffbf2e31a9aa07c86298efb01a30b8911b80af7473d1114715084b"
 
 def set_testnet():

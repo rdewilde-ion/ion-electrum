@@ -11,7 +11,6 @@ else:
 
 home = 'C:\\electrum\\'
 
-# We don't put these files in to actually include them in the script but to make the Analysis method scan them for imports
 a = Analysis([home+'electrum',
               home+'gui/qt/main_window.py',
               home+'gui/text.py',
@@ -58,18 +57,14 @@ def extra_datas(mydir):
     return extra_datas
 ###########################################
 
-# append dirs
 
-# cacert.pem
 a.datas += [ ('requests/cacert.pem', home+'packages/requests/cacert.pem', 'DATA') ]
 
-# Py folders that are needed because of the magic import finding
 a.datas += extra_datas(home+'gui')
 a.datas += extra_datas(home+'lib')
 a.datas += extra_datas(home+'plugins')
 a.datas += extra_datas(home+'packages')
 
-# http://stackoverflow.com/questions/19055089/pyinstaller-onefile-warning-pyconfig-h-when-importing-scipy-or-scipy-signal
 for d in a.datas:
     if 'pyconfig' in d[0]: 
         a.datas.remove(d)
@@ -84,9 +79,8 @@ exe = EXE(pyz,
           debug=False,
           strip=None,
           upx=False,
-          icon=home+'icons/electrum.ico',
+          icon='icons\\electrum.ico',
           console=False)
-          # The console True makes an annoying black box pop up, but it does make Electrum output command line commands, with this turned off no output will be given but commands can still be used
 
 coll = COLLECT(exe,
                a.binaries,
@@ -95,6 +89,6 @@ coll = COLLECT(exe,
                strip=None,
                upx=True,
                debug=False,
-               icon=home+'icons/electrum.ico',
+               icon='icons\\electrum.ico',
                console=False,
-               name=os.path.join('dist', 'electrum'))
+               name=os.path.join('dist', 'ion'))

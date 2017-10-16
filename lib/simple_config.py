@@ -8,7 +8,7 @@ from util import user_dir, print_error, print_msg, print_stderr, PrintError
 
 from bitcoin import MAX_FEE_RATE, FEE_TARGETS
 
-SYSTEM_CONFIG_PATH = "/etc/electrum.conf"
+SYSTEM_CONFIG_PATH = "/etc/electrum-ion.conf"
 
 config = None
 

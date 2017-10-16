@@ -69,6 +69,8 @@ def check_imports():
         import pbkdf2
         import google.protobuf
         import jsonrpclib
+        import idna
+        import certifi
     except ImportError as e:
         sys.exit("Error: %s. Try 'sudo pip install <module-name>'"%e.message)
     # the following imports are for pyinstaller
@@ -82,8 +84,25 @@ def check_imports():
         from ecdsa.ecdsa import curve_secp256k1, generator_secp256k1
     except Exception:
         sys.exit("cannot import ecdsa.curve_secp256k1. You probably need to upgrade ecdsa.\nTry: sudo pip install --upgrade ecdsa")
+
+    from os.path import join, abspath
+
     # make sure that certificates are here
-    assert os.path.exists(requests.utils.DEFAULT_CA_BUNDLE_PATH)
+    # requests.utils.DEFAULT_CA_BUNDLE_PATH = join(abspath('.'), 'certs/cacert.pem')
+    # Get the base directory
+    if getattr( sys , 'frozen' , None ):    # keyword 'frozen' is for setting basedir while in onefile mode in pyinstaller
+        basedir = sys._MEIPASS
+    else:
+        basedir = os.path.dirname( __file__ )
+        basedir = os.path.normpath( basedir )
+
+    # Locate the SSL certificate for requests
+    if os.name == 'nt':
+        os.environ['REQUESTS_CA_BUNDLE'] = os.path.join(basedir, 'requests', 'cacert.pem')
+    else:
+        os.environ['REQUESTS_CA_BUNDLE'] = requests.certs.where()
+
+    assert os.path.exists(os.environ["REQUESTS_CA_BUNDLE"])
 
 
 if not is_android:
@@ -340,7 +359,7 @@ if __name__ == '__main__':
     config_options['cwd'] = os.getcwd()
 
     if config_options.get('portable'):
-        config_options['electrum_path'] = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'electrum_data')
+        config_options['electrum_path'] = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'electrum_ion_data')
 
     # kivy sometimes freezes when we write to sys.stderr
     set_verbosity(config_options.get('verbose') and config_options.get('gui')!='kivy')
@@ -348,7 +367,7 @@ if __name__ == '__main__':
     # check uri
     uri = config_options.get('url')
     if uri:
-        if not uri.startswith('bitcoin:'):
+        if not uri.startswith('ion:'):
             print_stderr('unknown command:', uri)
             sys.exit(1)
         config_options['url'] = uri

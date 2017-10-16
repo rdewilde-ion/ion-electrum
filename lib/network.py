@@ -51,14 +51,16 @@ DEFAULT_PORTS = {'t':'50001', 's':'50002'}
 #then gradually switch remaining nodes to e-x nodes
 
 DEFAULT_SERVERS = {
+    'main.electrum.baseserv.com':DEFAULT_PORTS,
     'main.electrum.ionomy.nl':DEFAULT_PORTS, #
-    # 'main.electrum.ionomy.nl':DEFAULT_PORTS # rdewilde
+    #'localhost':DEFAULT_PORTS # rdewilde
 }
 
 def set_testnet():
     global DEFAULT_PORTS, DEFAULT_SERVERS
     DEFAULT_PORTS = {'t':'51001', 's':'51002'}
     DEFAULT_SERVERS = {
+        'test.electrum.baseserv.com':DEFAULT_PORTS,
         'test.electrum.ionomy.nl':DEFAULT_PORTS
     }
 
