@@ -1,4 +1,5 @@
 """Ion look and feel."""
+
 ion_stylesheet = '''
 /* Lite Mode -- cloned from "CleanLook" theme */
 #main_window {
@@ -646,5 +647,3 @@ QDialog QWidget { /* Remove Annoying Focus Rectangle */
     outline: 0;
 }
 '''
-
-ion_stylesheet = open('./style.css', 'r').read()
