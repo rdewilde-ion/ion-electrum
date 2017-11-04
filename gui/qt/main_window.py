@@ -95,6 +95,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def __init__(self, gui_object, wallet):
         QMainWindow.__init__(self)
 
+        self.setObjectName("main_window_container")
         self.gui_object = gui_object
         self.config = config = gui_object.config
         self.network = gui_object.daemon.network
@@ -137,12 +138,13 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         tabs.addTab(self.create_contacts_tab(), _('Contacts') )
         tabs.addTab(self.create_console_tab(), _('Console') )
         tabs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        tabs.setObjectName("main_window_nav_bar")
         self.setCentralWidget(tabs)
 
         if self.config.get("is_maximized"):
             self.showMaximized()
 
-        self.setWindowIcon(QIcon(":icons/electrum.png"))
+        self.setWindowIcon(QIcon(":icons/electrum-ion.png"))
         self.init_menubar()
 
         wrtabs = weakref.proxy(tabs)
@@ -339,7 +341,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             self.setGeometry(100, 100, 840, 400)
 
     def watching_only_changed(self):
-        title = 'Electrum %s  -  %s' % (self.wallet.electrum_version,
+        title = 'Electrum-ion %s  -  %s' % (self.wallet.electrum_version,
                                         self.wallet.basename())
         extra = [self.wallet.storage.get('wallet_type', '?')]
         if self.wallet.is_watching_only():
@@ -356,8 +358,8 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         if self.wallet.is_watching_only():
             msg = ' '.join([
                 _("This wallet is watching-only."),
-                _("This means you will not be able to spend Bitcoins with it."),
-                _("Make sure you own the seed phrase or the private keys, before you request Bitcoins to be sent to this wallet.")
+                _("This means you will not be able to spend ION with it."),
+                _("Make sure you own the seed phrase or the private keys, before you request ION to be sent to this wallet.")
             ])
             self.show_warning(msg, title=_('Information'))
 
@@ -382,7 +384,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
                 shutil.copy2(path, new_path)
                 self.show_message(_("A copy of your wallet file was created in")+" '%s'" % str(new_path), title=_("Wallet backup created"))
             except (IOError, os.error), reason:
-                self.show_critical(_("Electrum was unable to copy your wallet file to the specified location.") + "\n" + str(reason), title=_("Unable to create backup"))
+                self.show_critical(_("electrum-ion was unable to copy your wallet file to the specified location.") + "\n" + str(reason), title=_("Unable to create backup"))
 
     def update_recently_visited(self, filename):
         recent = self.config.get('recently_open', [])
@@ -503,8 +505,8 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             self.show_error(_('No donation address for this server'))
 
     def show_about(self):
-        QMessageBox.about(self, "Electrum",
-            _("Version")+" %s" % (self.wallet.electrum_version) + "\n\n" + _("Electrum's focus is speed, with low resource usage and simplifying Bitcoin. You do not need to perform regular backups, because your wallet can be recovered from a secret phrase that you can memorize or write on paper. Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the Bitcoin system."))
+        QMessageBox.about(self, "electrum-ion",
+            _("Version")+" %s" % (self.wallet.electrum_version) + "\n\n" + _("electrum-ion's focus is speed, with low resource usage and simplifying ION. You do not need to perform regular backups, because your wallet can be recovered from a secret phrase that you can memorize or write on paper. Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the ION system."))
 
     def show_report_bug(self):
         msg = ' '.join([
@@ -697,6 +699,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def create_history_tab(self):
         from history_list import HistoryList
         self.history_list = l = HistoryList(self)
+        l.setObjectName("history_container")
         l.searchable_list = l
         return l
 
@@ -792,6 +795,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         hbox.addWidget(self.receive_qr)
 
         w = QWidget()
+        w.setObjectName("receive_container")
         w.searchable_list = self.request_list
         vbox = QVBoxLayout(w)
         vbox.addLayout(hbox)
@@ -1104,6 +1108,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         hbox = QHBoxLayout()
         hbox.addLayout(vbox0)
         w = QWidget()
+        w.setObjectName("send_container")
         vbox = QVBoxLayout(w)
         vbox.addLayout(hbox)
         vbox.addStretch(1)
@@ -1153,6 +1158,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
                 self.not_enough_funds = False
             except NotEnoughFunds:
                 self.not_enough_funds = True
+                return
             except BaseException:
                 return
             if not freeze_fee:
@@ -1322,7 +1328,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         confirm_amount = self.config.get('confirm_amount', COIN)
         msg = [
             _("Amount to be sent") + ": " + self.format_amount_and_units(amount),
-            _("Mining fee") + ": " + self.format_amount_and_units(fee),
+            _("Fee") + ": " + self.format_amount_and_units(fee),
         ]
 
         extra_fee = run_hook('get_additional_fee', self.wallet, tx)
@@ -1538,6 +1544,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def create_addresses_tab(self):
         from address_list import AddressList
         self.address_list = l = AddressList(self)
+        l.setObjectName("addresses_container")
         return self.create_list_tab(l)
 
     def create_utxo_tab(self):
@@ -1548,6 +1555,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def create_contacts_tab(self):
         from contact_list import ContactList
         self.contact_list = l = ContactList(self)
+        l.setObjectName("contacts_container")
         return self.create_list_tab(l)
 
     def remove_address(self, addr):
@@ -1665,6 +1673,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def create_console_tab(self):
         from console import Console
         self.console = console = Console()
+        console.setObjectName("console_container")
         return console
 
 
@@ -1698,6 +1707,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         qtVersion = qVersion()
 
         self.balance_label = QLabel("")
+        self.balance_label.setObjectName("main_window_balance")
         sb.addWidget(self.balance_label)
 
         self.search_box = QLineEdit()

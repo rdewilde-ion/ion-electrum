@@ -41,7 +41,7 @@ TESTNET = False
 NOLNET = False
 ADDRTYPE_P2PKH = 103
 ADDRTYPE_P2SH = 88
-ADDRTYPE_P2WPKH = 153
+ADDRTYPE_P2WPKH = 204
 XPRV_HEADER = 0x0488ade4
 XPUB_HEADER = 0x0488b21e
 HEADERS_URL = "https://headers.electrum.ionomy.nl/blockchain_headers" # TODO FIXME
@@ -54,7 +54,7 @@ def set_testnet():
     global TESTNET, HEADERS_URL
     global GENESIS
     TESTNET = True
-    ADDRTYPE_P2PKH = 97
+    ADDRTYPE_P2PKH = 127
     ADDRTYPE_P2SH = 196
     ADDRTYPE_P2WPKH = 239
     XPRV_HEADER = 0x04358394
@@ -482,7 +482,7 @@ from ecdsa.util import string_to_number, number_to_string
 def msg_magic(message):
     varint = var_int(len(message))
     encoded_varint = "".join([chr(int(varint[i:i+2], 16)) for i in xrange(0, len(varint), 2)])
-    return "\x18Bitcoin Signed Message:\n" + encoded_varint + message
+    return "\x18ION Signed Message:\n" + encoded_varint + message
 
 
 def verify_message(address, sig, message):

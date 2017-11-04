@@ -32,7 +32,7 @@ class UTXOList(MyTreeWidget):
     filter_columns = [0, 2]  # Address, Label
 
     def __init__(self, parent=None):
-        MyTreeWidget.__init__(self, parent, self.create_menu, [ _('Address'), _('Output point'), _('Label'), _('Amount'), ''], 2)
+        MyTreeWidget.__init__(self, parent, self.create_menu, [ _('Address'), _('Output'), _('Label'), _('Amount'), ''], 2)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     def get_name(self, x):

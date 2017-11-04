@@ -27,7 +27,7 @@ import sys
 import os
 import signal
 
-from gui.qt.ion_style import ion_stylesheet
+#from gui.qt.ion_style import ion_stylesheet
 
 try:
     import PyQt4
@@ -46,6 +46,7 @@ from electrum.verifier import SPV
 from electrum.util import DebugMem, UserCancelled, InvalidPassword
 from electrum.wallet import Abstract_Wallet
 from installwizard import InstallWizard, GoBack
+from ion_style import ion_stylesheet
 
 
 try:
@@ -93,7 +94,7 @@ class ElectrumGui:
         # init tray
         self.dark_icon = self.config.get("dark_icon", False)
         self.tray = QSystemTrayIcon(self.tray_icon(), None)
-        self.tray.setToolTip('Electrum')
+        self.tray.setToolTip('Electrum ION')
         self.tray.activated.connect(self.tray_activated)
         self.build_tray_menu()
         self.tray.show()

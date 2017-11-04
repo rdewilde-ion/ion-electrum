@@ -647,4 +647,4 @@ QDialog QWidget { /* Remove Annoying Focus Rectangle */
 }
 '''
 
-# ion_stylesheet = open('./style.css', 'r').read()
+ion_stylesheet = open('./style.css', 'r').read()

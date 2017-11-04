@@ -81,7 +81,7 @@ class BaseWizard(object):
             ('standard',  _("Standard wallet")),
             ('2fa', _("Wallet with two-factor authentication")),
             ('multisig',  _("Multi-signature wallet")),
-            ('imported',  _("Watch Bitcoin addresses")),
+            ('imported',  _("Watch ION addresses")),
         ]
         choices = [pair for pair in wallet_kinds if pair[0] in wallet_types]
         self.choice_dialog(title=title, message=message, choices=choices, run_next=self.on_wallet_type)
@@ -138,8 +138,8 @@ class BaseWizard(object):
 
     def import_addresses(self):
         v = keystore.is_address_list
-        title = _("Import Bitcoin Addresses")
-        message = _("Enter a list of Bitcoin addresses. This will create a watching-only wallet.")
+        title = _("Import ION Addresses")
+        message = _("Enter a list of ION addresses. This will create a watching-only wallet.")
         self.add_xpub_dialog(title=title, message=message, run_next=self.on_import_addresses, is_valid=v)
 
     def on_import_addresses(self, text):

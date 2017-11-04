@@ -22,7 +22,7 @@ class GoBack(Exception):
 
 MSG_GENERATING_WAIT = _("Electrum is generating your addresses, please wait...")
 MSG_ENTER_ANYTHING = _("Please enter a seed phrase, a master key, a list of "
-                       "Bitcoin addresses, or a list of private keys")
+                       "ION addresses, or a list of private keys")
 MSG_ENTER_SEED_OR_MPK = _("Please enter a seed phrase or a master key (xpub or xprv):")
 MSG_COSIGNER = _("Please enter the master public key of cosigner #%d:")
 MSG_ENTER_PASSWORD = _("Choose a password to encrypt your wallet keys.") + '\n'\
@@ -100,7 +100,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         BaseWizard.__init__(self, config, storage)
         QDialog.__init__(self, None)
 
-        self.setWindowTitle('Electrum  -  ' + _('Install Wizard'))
+        self.setWindowTitle('Electrum ION  -  ' + _('Install Wizard'))
         self.app = app
         self.config = config
 
@@ -221,7 +221,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         path = self.storage.path
         if self.storage.requires_split():
             self.hide()
-            msg = _("The wallet '%s' contains multiple accounts, which are no longer supported in Electrum 2.7.\n\n"
+            msg = _("The wallet '%s' contains multiple accounts, which are no longer supported in Electrum 2.9.\n\n"
                     "Do you want to split your wallet into multiple files?"%path)
             if not self.question(msg):
                 return

@@ -348,16 +348,16 @@ def time_difference(distance_in_time, include_seconds):
         return "over %d years" % (round(distance_in_minutes / 525600))
 
 block_explorer_info = {
-    'Blockr.io': ('https://btc.blockr.io',
-                        {'tx': 'tx/info', 'addr': 'address/info'}),
-    'Blockr.io': ('http://ionexplorer.com',
-                  {'tx': 'tx/info', 'addr': 'address/info'}),
-    'system default': ('blockchain:',
-                        {'tx': 'tx', 'addr': 'address'}),
+    # 'Blockr.io': ('https://btc.blockr.io',
+    #                     {'tx': 'tx/info', 'addr': 'address/info'}),
+    'Ionexplorer': ('http://ionexplorer.com',
+                  {'tx': 'transaction', 'addr': 'address'}),
+    # 'system default': ('blockchain:',
+    #                     {'tx': 'tx', 'addr': 'address'}),
 }
 
 def block_explorer(config):
-    return config.get('block_explorer', 'Blockchain.info')
+    return config.get('block_explorer', 'Ionexplorer')
 
 def block_explorer_tuple(config):
     return block_explorer_info.get(block_explorer(config))
@@ -387,7 +387,7 @@ def parse_URI(uri, on_pr=None):
 
     u = urlparse.urlparse(uri)
     if u.scheme != 'ion':
-        raise BaseException("Not a bitcoin URI")
+        raise BaseException("Not a ion URI")
     address = u.path
 
     # python for android fails to parse query
