@@ -1,6 +1,12 @@
 """Ion look and feel."""
 
 ion_stylesheet = '''
+* {
+    font-family: "Source Sans Pro", Candara, Calibri, Verdana, Arial, sans serif;
+    font-weight: normal;
+    font-size: 10pt;
+}
+
 /* Lite Mode -- cloned from "CleanLook" theme */
 #main_window {
     /*border-image: url(:/icons/bg.png) 0 0 0 0 stretch stretch;*/
@@ -13,6 +19,7 @@ MiniWindow QPushButton {
     /*background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 white, stop: 1 #E6E6E6);*/
     min-height: 30px;
     min-width: 30px;
+    border: none;
 }
 
 #send_button{
@@ -139,6 +146,18 @@ QTabWidget#main_window_nav_bar::pane {
 
 QStatusBar {
     background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #0C1C24, stop: 1 #3A2C4B);
+    border: none;
+}
+
+StatusBarButton {
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+}
+
+QPushButton {
+    outline: 0;
 }
 
 /**********************/
@@ -190,7 +209,7 @@ QLabel {
 }
 
 #history_container , #send_container, #receive_container, #contacts_container, #addresses_container, #console_container {
-    margin: 20;
+    padding: 20;
     background-color: white;
 }
 
@@ -298,9 +317,8 @@ QToolBar {
 
 QToolBar > QToolButton {
     /*background-color:#3398CC;*/
-    border:0px solid #333;
+    border:0;
     min-height:2.5em;
-    padding: 0em 1em;
     font-weight:bold;
     color:#fff;
 }
@@ -324,7 +342,7 @@ QLabel { /* Base Text Size & Color */
 /**********************/
 /* 5. Buttons, Spinners, Dropdown */
 
-QPushButton { /* Global Button Style */
+CancelButton, CloseButton, QPushButton { /* Global Button Style */
     /*background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #64ACD2, stop: .1 #3398CC, stop: .95 #3398CC, stop: 1 #1D80B5);*/
     border-radius:6px;
     color:#00adf6;
@@ -347,7 +365,9 @@ QPushButton:focus {
 }
 
 QPushButton:pressed {
-    border:1px solid #333;
+    /*border:1px solid #333;*/
+    border:none;
+    outline:none;
 }
 
 QComboBox { /* Dropdown Menus */
@@ -645,5 +665,17 @@ QDialog QTabWidget QWidget QComboBox {
 
 QDialog QWidget { /* Remove Annoying Focus Rectangle */
     outline: 0;
+}
+
+QWidget {
+    outline: 0;
+}
+
+
+StatusBarButton {
+    border: none !important;
+    padding: 0;
+    margin: 0;
+    outline: none !important;
 }
 '''

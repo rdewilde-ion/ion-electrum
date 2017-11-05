@@ -1,6 +1,8 @@
 <RCC>
   <qresource prefix="/" >
+    <file>icons/electrum.ico</file>
     <file>icons/electrum.png</file>
+    <file>icons/electrum-ion.png</file>
     <file>icons/clock1.png</file>
     <file>icons/clock2.png</file>
     <file>icons/clock3.png</file>
@@ -50,5 +52,7 @@
     <file>icons/ion_downArrow_small.png</file>
     <file>icons/ion_leftArrow_small.png</file>
     <file>icons/ion_rightArrow_small.png</file>
+    <file>fonts/SourceSansPro-Regular.otf</file>
+    <file>fonts/SourceCodePro-Regular.otf</file>
   </qresource>
 </RCC>
