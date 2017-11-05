@@ -15,3 +15,4 @@ Terminal=false
 Type=Application
 MimeType=x-scheme-handler/ion;
 
+X-Desktop-File-Install-Version=0.22
