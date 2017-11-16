@@ -53,6 +53,7 @@ DEFAULT_PORTS = {'t':'50001', 's':'50002'}
 DEFAULT_SERVERS = {
     'main.electrum.baseserv.com':DEFAULT_PORTS,
     'main.electrum.ionomy.nl':DEFAULT_PORTS, #
+    'electrum.ionomy.online':DEFAULT_PORTS, #
     #'localhost':DEFAULT_PORTS # rdewilde
 }
 
